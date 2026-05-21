@@ -12,7 +12,7 @@
                       value="jdbc:sqlserver://localhost:1433;databaseName=NhacSoMuli;encrypt=false"/>
 
             <property name="javax.persistence.jdbc.user" value="sa"/>
-            <property name="javax.persistence.jdbc.password" value="an160908"/>
+            <property name="javax.persistence.jdbc.password" value=""/>
 
             <property name="javax.persistence.jdbc.driver"
                       value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
