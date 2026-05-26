@@ -1,4 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page import="java.util.*" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="vi">
@@ -6,231 +7,241 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MuLi — Đăng ký</title>
-<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --green:      #1db954;
-    --bg:         #000000;
-    --surface:    #121212;
-    --border:     #282828;
-    --text:       #ffffff;
-    --text-sub:   #a7a7a7;
-    --text-muted: #6a6a6a;
-    --input-bg:   #242424;
-    --error:      #f15e6c;
+    --bg:       #080a0f;
+    --card:     #111520;
+    --border:   #1c2236;
+    --accent:   #6c63ff;
+    --accent2:  #ff5fa0;
+    --glow:     rgba(108,99,255,0.35);
+    --text:     #eef0f6;
+    --muted:    #5a6282;
+    --input-bg: #0b0e18;
+    --error:    #ff5f5f;
+    --success:  #36d9a0;
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   body {
     background: var(--bg);
-    font-family: 'Be Vietnam Pro', sans-serif;
+    font-family: 'DM Sans', sans-serif;
     color: var(--text);
     min-height: 100vh;
     display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    padding: 40px 24px;
+    overflow: hidden;
   }
-
-  .card {
-    background: var(--surface);
-    border-radius: 12px;
-    width: 100%;
-    max-width: 480px;
-    padding: 48px 48px 40px;
+  /* ── LEFT ── */
+  .left-panel {
+    flex: 1; position: relative;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 60px; overflow: hidden;
   }
-
+  .bg-gradient {
+    position: absolute; inset: 0; z-index: 0;
+    background:
+      radial-gradient(ellipse 80% 80% at 20% 50%, rgba(108,99,255,0.18) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 60% at 80% 20%, rgba(255,95,160,0.12) 0%, transparent 55%),
+      radial-gradient(ellipse 50% 50% at 60% 80%, rgba(54,217,160,0.08) 0%, transparent 50%);
+  }
+  .vinyl-art {
+    position: absolute; right: -80px; top: 50%;
+    transform: translateY(-50%);
+    width: 420px; height: 420px; border-radius: 50%;
+    background:
+      radial-gradient(circle at center, #1a1040 0%, #0d0820 30%, #080a0f 50%),
+      conic-gradient(from 0deg, #1c1c2e, #2a1a3e, #1c1c2e, #2a1a3e, #1c1c2e);
+    box-shadow: 0 0 0 2px #1c2236, 0 0 60px rgba(108,99,255,0.2), inset 0 0 40px rgba(0,0,0,0.6);
+    animation: spin 24s linear infinite; opacity: 0.6;
+  }
+  .vinyl-art::before {
+    content: ''; position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    width: 80px; height: 80px; border-radius: 50%;
+    background: var(--bg); border: 2px solid #1c2236;
+  }
+  .vinyl-art::after {
+    content: ''; position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    width: 12px; height: 12px; border-radius: 50%;
+    background: var(--accent); box-shadow: 0 0 10px var(--accent);
+  }
+  @keyframes spin { to { transform: translateY(-50%) rotate(360deg); } }
+  .left-content { position: relative; z-index: 1; max-width: 420px; }
   .logo {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 56px; text-decoration: none;
+  }
+  .logo-icon {
+    width: 38px; height: 38px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 10px;
     display: flex; align-items: center; justify-content: center;
-    gap: 10px; margin-bottom: 28px; text-decoration: none;
+    font-size: 18px; box-shadow: 0 0 20px var(--glow);
   }
-  .logo svg { width: 36px; height: 36px; }
-  .logo-text { font-size: 26px; font-weight: 800; color: #fff; letter-spacing: -0.5px; }
-
-  h1 { font-size: 24px; font-weight: 700; text-align: center; margin-bottom: 28px; line-height: 1.3; }
-
-  .btn-outline {
-    width: 100%; padding: 13px 16px; background: transparent;
-    border: 1px solid #535353; border-radius: 50px; color: var(--text);
-    font-family: 'Be Vietnam Pro', sans-serif; font-size: 14px; font-weight: 600;
-    cursor: pointer; transition: border-color 0.15s, transform 0.1s;
-    display: flex; align-items: center; justify-content: center; gap: 10px;
-    margin-bottom: 10px;
+  .logo-text {
+    font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800;
+    background: linear-gradient(90deg, #fff, #a09af0);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   }
-  .btn-outline:hover { border-color: #fff; transform: scale(1.01); }
-  .btn-outline svg { width: 20px; height: 20px; flex-shrink: 0; }
-
-  .divider {
-    display: flex; align-items: center; gap: 12px;
-    margin: 20px 0 24px; color: var(--text-muted); font-size: 12px; font-weight: 500;
+  .left-headline {
+    font-family: 'Syne', sans-serif; font-size: 46px; font-weight: 800;
+    line-height: 1.08; letter-spacing: -2px; margin-bottom: 18px;
   }
-  .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
-
-  .section-label { font-size: 15px; font-weight: 700; color: var(--text); margin: 22px 0 14px; }
-
-  .field { margin-bottom: 16px; }
-  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-
-  label { display: block; font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
-
-  .input-wrap { position: relative; }
-  input[type=text], input[type=email], input[type=password], input[type=date] {
-    width: 100%; background: var(--input-bg); border: 1px solid var(--border);
-    border-radius: 6px; color: var(--text);
-    font-family: 'Be Vietnam Pro', sans-serif; font-size: 14px; font-weight: 400;
-    padding: 14px 44px 14px 16px; outline: none;
-    transition: border-color 0.2s; -webkit-appearance: none;
+  .left-headline .hl {
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   }
-  input[type=date] { padding-right: 16px; }
-  input:hover { border-color: #535353; }
-  input:focus { border-color: #fff; }
-  input::placeholder { color: var(--text-muted); }
-  input[type=date]::-webkit-calendar-picker-indicator { filter: invert(0.5); cursor: pointer; }
-
-  select {
-    width: 100%; background: var(--input-bg); border: 1px solid var(--border);
-    border-radius: 6px; color: var(--text);
-    font-family: 'Be Vietnam Pro', sans-serif; font-size: 14px; font-weight: 400;
-    padding: 14px 16px; outline: none; cursor: pointer;
-    transition: border-color 0.2s; -webkit-appearance: none;
+  .left-sub { font-size: 15px; color: var(--muted); line-height: 1.7; max-width: 320px; margin-bottom: 40px; }
+  .stats-row { display: flex; gap: 28px; }
+  .stat-num { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 700; color: #fff; line-height: 1; }
+  .stat-label { font-size: 11px; color: var(--muted); margin-top: 3px; letter-spacing: 0.5px; text-transform: uppercase; }
+  /* ── RIGHT ── */
+  .right-panel {
+    width: 520px; min-width: 520px;
+    background: var(--card); border-left: 1px solid var(--border);
+    display: flex; flex-direction: column; justify-content: flex-start;
+    padding: 40px 44px; overflow-y: auto;
   }
-  select:hover { border-color: #535353; }
-  select:focus { border-color: #fff; }
-  select option { background: #242424; }
-
-  .toggle-pw {
-    position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
-    background: none; border: none; color: var(--text-muted);
-    cursor: pointer; font-size: 16px; padding: 0;
-    transition: color 0.2s; line-height: 1;
-  }
-  .toggle-pw:hover { color: var(--text); }
-
-  /* Password strength */
-  .strength-wrap { margin-top: 8px; }
-  .strength-bars { display: flex; gap: 4px; }
-  .strength-bar { flex: 1; height: 3px; border-radius: 2px; background: var(--border); transition: background 0.3s; }
-  .strength-label { font-size: 11px; font-weight: 500; color: var(--text-muted); margin-top: 5px; }
-
-  /* Checkbox */
-  .checkbox-label {
-    display: flex; align-items: flex-start; gap: 10px;
-    font-size: 13px; font-weight: 400; color: var(--text-sub); cursor: pointer; line-height: 1.6;
-  }
-  .checkbox-label input[type=checkbox] { display: none; }
-  .custom-check {
-    width: 16px; height: 16px; flex-shrink: 0; margin-top: 2px;
-    border: 1px solid #535353; border-radius: 3px; background: transparent;
-    display: flex; align-items: center; justify-content: center; transition: all 0.15s;
-  }
-  .checkbox-label:hover .custom-check { border-color: #fff; }
-  .checkbox-label input:checked + .custom-check { background: var(--green); border-color: var(--green); }
-  .custom-check::after { content: '✓'; color: #000; font-size: 10px; font-weight: 700; display: none; }
-  .checkbox-label input:checked + .custom-check::after { display: block; }
-  .checkbox-label a { color: var(--green); text-decoration: none; font-weight: 600; }
-  .checkbox-label a:hover { text-decoration: underline; }
-
+  .form-title { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 700; margin-bottom: 6px; }
+  .form-sub { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
   /* Alert */
   .alert {
-    padding: 12px 16px; border-radius: 6px; font-size: 13px; font-weight: 500;
-    margin-bottom: 20px; display: flex; align-items: flex-start; gap: 8px; line-height: 1.5;
+    padding: 11px 14px; border-radius: 8px; font-size: 13px;
+    margin-bottom: 20px; display: flex; align-items: center; gap: 8px;
   }
-  .alert-error   { background: rgba(241,94,108,0.15); border: 1px solid rgba(241,94,108,0.4); color: #f87171; }
-  .alert-success { background: rgba(29,185,84,0.12);  border: 1px solid rgba(29,185,84,0.4);  color: var(--green); }
-
-  .btn-green {
-    width: 100%; padding: 14px; background: var(--green);
-    border: none; border-radius: 50px; color: #000;
-    font-family: 'Be Vietnam Pro', sans-serif;
-    font-size: 15px; font-weight: 700; cursor: pointer; letter-spacing: 0.5px; margin-top: 8px;
-    transition: background 0.15s, transform 0.1s;
+  .alert-error   { background: rgba(255,95,95,0.1); border: 1px solid rgba(255,95,95,0.3); color: #ff8080; }
+  .alert-success { background: rgba(54,217,160,0.1); border: 1px solid rgba(54,217,160,0.3); color: #36d9a0; }
+  .section-label {
+    font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700;
+    color: #fff; margin: 18px 0 10px; border-left: 3px solid var(--accent); padding-left: 8px;
   }
-  .btn-green:hover { background: #1ed760; transform: scale(1.02); }
-  .btn-green:active { transform: scale(0.99); }
+  .field { margin-bottom: 14px; }
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 
-  .terms-text {
-    font-size: 11px; color: var(--text-muted); text-align: center;
-    margin-top: 14px; line-height: 1.7;
+  label {
+    display: block; font-size: 11px; font-weight: 600;
+    color: var(--muted); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 5px;
   }
-  .terms-text a { color: var(--green); text-decoration: none; }
-  .terms-text a:hover { text-decoration: underline; }
+  .input-wrap { position: relative; }
 
-  .bottom-text {
-    text-align: center; font-size: 14px; color: var(--text-muted);
-    margin-top: 28px; padding-top: 24px; border-top: 1px solid var(--border); line-height: 1.6;
+  input[type=text], input[type=email], input[type=password], input[type=date], select {
+    width: 100%; background: var(--input-bg); border: 1px solid var(--border);
+    border-radius: 8px; color: var(--text);
+    font-family: 'DM Sans', sans-serif; font-size: 14px;
+    padding: 12px 14px; outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s; -webkit-appearance: none;
   }
-  .bottom-text a { color: var(--text); font-weight: 600; text-decoration: underline; }
-  .bottom-text a:hover { color: var(--green); }
+  input[type=password] { padding-right: 40px; }
+  select {
+    cursor: pointer;
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%235a6282'%3E%3Cpath d='M7 10l5 5 5-5H7z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 12px center; background-size: 16px;
+    padding-right: 32px;
+  }
+  input:focus, select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(108,99,255,0.18); }
+  input::placeholder { color: #2e3450; }
 
-  @media (max-width: 540px) {
-    .card { padding: 36px 20px 32px; border-radius: 0; }
-    body { padding: 0; }
-    .field-row { grid-template-columns: 1fr; }
+  .toggle-pw {
+    position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+    background: none; border: none; color: var(--muted);
+    cursor: pointer; padding: 2px; font-size: 14px; transition: color 0.2s;
+  }
+  .toggle-pw:hover { color: var(--text); }
+  /* Password strength */
+  .strength-wrap { margin-top: 6px; }
+  .strength-bars { display: flex; gap: 4px; }
+  .strength-bar { flex: 1; height: 3px; border-radius: 2px; background: var(--border); transition: background 0.3s; }
+  .strength-label { font-size: 11px; font-weight: 500; color: var(--muted); margin-top: 4px; }
+  /* Checkbox */
+  .checkbox-label { display: flex; align-items: flex-start; gap: 8px; font-size: 13px; color: var(--muted); cursor: pointer; line-height: 1.4; }
+  .checkbox-label input[type=checkbox] { display: none; }
+  .custom-check {
+    width: 16px; height: 16px; border: 1px solid var(--border); border-radius: 4px;
+    background: var(--input-bg); display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; transition: all 0.2s; margin-top: 2px;
+  }
+  .checkbox-label input:checked + .custom-check { background: var(--accent); border-color: var(--accent); }
+  .custom-check::after { content: '✓'; color: #fff; font-size: 10px; display: none; }
+  .checkbox-label input:checked + .custom-check::after { display: block; }
+  .checkbox-label a { color: var(--accent); text-decoration: none; }
+  .checkbox-label a:hover { text-decoration: underline; }
+  .btn-primary {
+    width: 100%; padding: 13px;
+    background: linear-gradient(135deg, var(--accent), #8b5cf6);
+    border: none; border-radius: 10px; color: #fff;
+    font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: 0.4px;
+    cursor: pointer; box-shadow: 0 8px 24px var(--glow);
+    transition: transform 0.15s, box-shadow 0.15s;
+    position: relative; overflow: hidden; margin-top: 10px;
+  }
+  .btn-primary::before {
+    content: ''; position: absolute; top: 0; left: -100%;
+    width: 60%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+    transition: left 0.4s;
+  }
+  .btn-primary:hover::before { left: 150%; }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 12px 32px var(--glow); }
+  .btn-primary:active { transform: translateY(0); }
+  .switch-note { font-size: 13px; color: var(--muted); text-align: center; margin-top: 20px; }
+  .switch-note a { color: var(--accent); text-decoration: none; font-weight: 600; }
+  .switch-note a:hover { text-decoration: underline; }
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  @media (max-width: 960px) {
+    .left-panel { display: none; }
+    .right-panel { width: 100%; min-width: unset; border-left: none; padding: 36px 24px; }
   }
 </style>
 </head>
 <body>
-
-<div class="card">
-
-  <a href="${pageContext.request.contextPath}/" class="logo">
-    <svg viewBox="0 0 24 24" fill="#1db954" xmlns="http://www.w3.org/2000/svg">
-      <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424a.623.623 0 0 1-.857.207c-2.348-1.435-5.304-1.76-8.785-.964a.623.623 0 1 1-.277-1.215c3.809-.87 7.076-.496 9.712 1.115a.623.623 0 0 1 .207.857zm1.223-2.722a.78.78 0 0 1-1.072.257c-2.687-1.652-6.785-2.131-9.965-1.166a.78.78 0 0 1-.973-.519.781.781 0 0 1 .52-.972c3.632-1.102 8.147-.568 11.233 1.328a.78.78 0 0 1 .257 1.072zm.105-2.835C14.692 8.95 9.375 8.775 6.297 9.71a.937.937 0 1 1-.543-1.793c3.532-1.072 9.404-.865 13.115 1.337a.937.937 0 0 1-.955 1.613z"/>
-    </svg>
-    <span class="logo-text">MuLi</span>
-  </a>
-
-  <h1>Đăng ký để nghe nhạc miễn phí</h1>
-
-  <%-- Alert từ Spring Model --%>
+<!-- LEFT -->
+<div class="left-panel">
+  <div class="bg-gradient"></div>
+  <div class="vinyl-art"></div>
+  <div class="left-content">
+    <a href="${pageContext.request.contextPath}/" class="logo">
+      <div class="logo-icon">🎵</div>
+      <span class="logo-text">MuLi</span>
+    </a>
+    <h1 class="left-headline">Âm nhạc<br>không có<br><span class="hl">giới hạn.</span></h1>
+    <p class="left-sub">Khám phá hàng triệu bài hát, tạo playlist riêng, và theo dõi nghệ sĩ yêu thích — mọi lúc, mọi nơi.</p>
+    <div class="stats-row">
+      <div class="stat"><div class="stat-num">10M+</div><div class="stat-label">Bài hát</div></div>
+      <div class="stat"><div class="stat-num">500K</div><div class="stat-label">Nghệ sĩ</div></div>
+      <div class="stat"><div class="stat-num">HD</div><div class="stat-label">Chất lượng</div></div>
+    </div>
+  </div>
+</div>
+<!-- RIGHT -->
+<div class="right-panel">
+  <div class="form-title">Đăng ký tài khoản 🚀</div>
+  <div class="form-sub">Tạo tài khoản mới và bắt đầu thưởng thức âm nhạc</div>
+  <%-- Hiển thị alert từ Spring Model --%>
   <c:if test="${not empty errorMsg}">
     <div class="alert alert-error">⚠ ${errorMsg}</div>
   </c:if>
   <c:if test="${not empty successMsg}">
     <div class="alert alert-success">✓ ${successMsg}</div>
   </c:if>
-
-  <button class="btn-outline" type="button">
-    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-      <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-      <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-      <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
-      <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-    </svg>
-    Đăng ký với Google
-  </button>
-
-  <button class="btn-outline" type="button">
-    <svg viewBox="0 0 24 24" fill="#1877F2" xmlns="http://www.w3.org/2000/svg">
-      <path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.234 2.686.234v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/>
-    </svg>
-    Đăng ký với Facebook
-  </button>
-
-  <div class="divider">hoặc</div>
-
-  <%-- action trỏ đến Spring Controller --%>
   <form action="${pageContext.request.contextPath}/register" method="post" onsubmit="return validateRegister()">
 
-    <%-- Bỏ comment nếu dùng Spring Security CSRF --%>
-    <%-- <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/> --%>
-
     <p class="section-label">Thông tin tài khoản</p>
-
     <div class="field">
       <label for="email">Địa chỉ email</label>
       <div class="input-wrap">
         <input type="email" name="email" id="email"
-               placeholder="Nhập email của bạn"
+               placeholder="hello@example.com"
                value="${registerForm.email}" required>
       </div>
     </div>
-
     <div class="field">
       <label for="password">Tạo mật khẩu</label>
       <div class="input-wrap">
         <input type="password" name="password" id="password"
-               placeholder="Tạo mật khẩu" required
+               placeholder="Mật khẩu tối thiểu 8 ký tự" required
                oninput="checkStrength(this.value)">
         <button type="button" class="toggle-pw" onclick="togglePw('password', this)">👁</button>
       </div>
@@ -241,10 +252,9 @@
           <div class="strength-bar" id="sb3"></div>
           <div class="strength-bar" id="sb4"></div>
         </div>
-        <div class="strength-label" id="strength-text"></div>
+        <div class="strength-label" id="strength-text">Độ bảo mật mật khẩu</div>
       </div>
     </div>
-
     <div class="field">
       <label for="confirmPassword">Xác nhận mật khẩu</label>
       <div class="input-wrap">
@@ -253,9 +263,7 @@
         <button type="button" class="toggle-pw" onclick="togglePw('confirmPassword', this)">👁</button>
       </div>
     </div>
-
-    <p class="section-label">Thông tin của bạn</p>
-
+    <p class="section-label">Thông tin cá nhân</p>
     <div class="field-row">
       <div class="field">
         <label for="firstName">Họ</label>
@@ -274,63 +282,34 @@
         </div>
       </div>
     </div>
-
     <div class="field-row">
       <div class="field">
         <label for="birthday">Ngày sinh</label>
-        <input type="date" name="birthday" id="birthday"
-               value="${registerForm.birthday}" required>
+        <input type="date" name="birthday" id="birthday" required>
       </div>
       <div class="field">
         <label for="gender">Giới tính</label>
         <select name="gender" id="gender">
-          <option value="" disabled
-            <c:if test="${empty registerForm.gender}">selected</c:if>>Chọn...</option>
-          <option value="male"
-            <c:if test="${registerForm.gender == 'male'}">selected</c:if>>Nam</option>
-          <option value="female"
-            <c:if test="${registerForm.gender == 'female'}">selected</c:if>>Nữ</option>
-          <option value="other"
-            <c:if test="${registerForm.gender == 'other'}">selected</c:if>>Khác</option>
+          <option value="" disabled selected>Chọn...</option>
+          <option value="male">Nam</option>
+          <option value="female">Nữ</option>
+          <option value="other">Khác</option>
         </select>
       </div>
     </div>
-
-    <div class="field" style="margin-top: 8px;">
+    <div class="field" style="margin-top: 14px;">
       <label class="checkbox-label">
         <input type="checkbox" id="terms-check" required>
         <span class="custom-check"></span>
-        Tôi đồng ý với
-        <a href="${pageContext.request.contextPath}/terms">Điều khoản dịch vụ</a>
-        và
-        <a href="${pageContext.request.contextPath}/privacy">Chính sách bảo mật</a>
-        của MuLi
+        <span>Tôi hoàn toàn đồng ý với <a href="#">Điều khoản sử dụng</a> và <a href="#">Chính sách bảo mật</a> của MuLi.</span>
       </label>
     </div>
-
-    <div class="field">
-      <label class="checkbox-label">
-        <input type="checkbox" name="newsletter" value="true">
-        <span class="custom-check"></span>
-        Nhận thông báo về nhạc mới và ưu đãi từ MuLi
-      </label>
-    </div>
-
-    <button type="submit" class="btn-green">Đăng ký</button>
-
-    <p class="terms-text">
-      Bằng cách đăng ký, bạn đồng ý với
-      <a href="${pageContext.request.contextPath}/terms">Điều khoản</a> và
-      <a href="${pageContext.request.contextPath}/privacy">Chính sách bảo mật</a> của MuLi.
-    </p>
+    <button type="submit" class="btn-primary">Đăng ký</button>
   </form>
-
-  <p class="bottom-text">
-    Đã có tài khoản?
-    <a href="${pageContext.request.contextPath}/login">Đăng nhập tại đây</a>
+  <p class="switch-note">
+    Đã có tài khoản? <a href="${pageContext.request.contextPath}/login">Đăng nhập ngay →</a>
   </p>
 </div>
-
 <script>
   function togglePw(id, btn) {
     const inp = document.getElementById(id);
@@ -338,7 +317,6 @@
     inp.type = isText ? 'password' : 'text';
     btn.textContent = isText ? '👁' : '🙈';
   }
-
   function checkStrength(pw) {
     const bars   = ['sb1','sb2','sb3','sb4'].map(id => document.getElementById(id));
     const txt    = document.getElementById('strength-text');
@@ -347,22 +325,23 @@
     if (/[A-Z]/.test(pw))         score++;
     if (/[0-9]/.test(pw))         score++;
     if (/[^A-Za-z0-9]/.test(pw))  score++;
-    const colors = ['#f15e6c','#f15e6c','#fbbf24','#1db954'];
-    const labels = ['','Yếu','Trung bình','Mạnh','Rất mạnh'];
+    const colors = ['#f15e6c','#f15e6c','#fbbf24','#36d9a0'];
+    const labels = ['Độ bảo mật: Quá ngắn','Độ bảo mật: Yếu','Độ bảo mật: Trung bình','Độ bảo mật: Mạnh','Độ bảo mật: Rất mạnh'];
     const s = pw.length === 0 ? 0 : score;
-    bars.forEach((b, i) => b.style.background = i < s ? (colors[s-1] || '#1db954') : '#282828');
-    txt.textContent = labels[s] || '';
-    txt.style.color = colors[s-1] || '#6a6a6a';
+    bars.forEach((b, i) => b.style.background = i < s ? (colors[s-1] || '#36d9a0') : '#1c2236');
+    txt.textContent = labels[s] || 'Độ bảo mật mật khẩu';
+    txt.style.color = colors[s-1] || '#5a6282';
   }
-
   function validateRegister() {
     const pass    = document.getElementById('password').value;
     const confirm = document.getElementById('confirmPassword').value;
     const terms   = document.getElementById('terms-check').checked;
     if (pass.length < 8)  { alert('Mật khẩu phải có ít nhất 8 ký tự.'); return false; }
     if (pass !== confirm)  { alert('Mật khẩu xác nhận không khớp.'); return false; }
-    if (!terms)            { alert('Vui lòng đồng ý với điều khoản.'); return false; }
+    if (!terms)            { alert('Vui lòng đồng ý với các điều khoản.'); return false; }
     return true;
   }
 </script>
 </body>
+</html>
+</html>
