@@ -54,6 +54,24 @@ public class PlaylistDAO {
         }
     }
 
+    public Playlist findOwnedByIdWithSongs(Integer playlistId, Integer userId) {
+        EntityManager em = JpaUtils.getEntityManager();
+        try {
+            List<Playlist> playlists = em.createQuery(
+                            "SELECT DISTINCT p FROM Playlist p LEFT JOIN FETCH p.songs " +
+                                    "WHERE p.playlistId = :playlistId AND p.user.userId = :userId",
+                            Playlist.class
+                    )
+                    .setParameter("playlistId", playlistId)
+                    .setParameter("userId", userId)
+                    .setMaxResults(1)
+                    .getResultList();
+            return playlists.isEmpty() ? null : playlists.get(0);
+        } finally {
+            em.close();
+        }
+    }
+
     public List<Playlist> findByUser(Integer userId) {
         EntityManager em = JpaUtils.getEntityManager();
         try {
