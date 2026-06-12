@@ -1,5 +1,6 @@
 package com.nhacso.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -34,9 +35,11 @@ public class Album {
 
     @ManyToOne
     @JoinColumn(name = "artist_id")
+    @JsonIgnoreProperties({"albums", "songs"})
     private Artist artist;
 
     @OneToMany(mappedBy = "album")
+    @JsonIgnoreProperties({"album", "artists", "genres"})
     private List<Song> songs;
 }
 

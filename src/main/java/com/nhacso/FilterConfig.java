@@ -14,7 +14,7 @@ public class FilterConfig {
     public FilterRegistrationBean<AuthFilter> loggingFilter(AuthFilter authFilter){
         FilterRegistrationBean<AuthFilter> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(authFilter);
-        registrationBean.addUrlPatterns("/favorites", "/share", "/account/*", "/logout");
+        registrationBean.addUrlPatterns("/favorites", "/share", "/account/*");
         registrationBean.setOrder(1); // Chạy trước
         return registrationBean;
     }

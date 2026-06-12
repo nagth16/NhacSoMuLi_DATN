@@ -22,14 +22,22 @@ public class PasswordUtils {
     /**
      * Hàm dùng khi ĐĂNG NHẬP: Kiểm tra mật khẩu người dùng nhập có khớp với mật khẩu đã mã hóa trong DB không
      * @param rawPassword Mật khẩu chữ thường người dùng vừa gõ vào Form login
-     * @param hashedPassword Chuỗi mật khẩu đã mã hóa lấy ra từ database của User đó
+     * @param storedPassword Chuỗi mật khẩu lấy ra từ database của User đó
      * @return true nếu khớp, false nếu sai mật khẩu
      */
-    public static boolean matches(String rawPassword, String hashedPassword) {
-        if (rawPassword == null || hashedPassword == null) {
+    public static boolean matches(String rawPassword, String storedPassword) {
+        if (rawPassword == null || storedPassword == null) {
             return false;
         }
-        // BCrypt sẽ tự bóc tách muối và so sánh ngầm, bạn không cần dùng dấu == hay .equals() thông thường
-        return passwordEncoder.matches(rawPassword, hashedPassword);
+        // Nếu mật khẩu trong DB đã được hash BCrypt, dùng BCrypt để kiểm tra
+        if (storedPassword.startsWith("$2a$") || storedPassword.startsWith("$2b$") || storedPassword.startsWith("$2y$")) {
+            return passwordEncoder.matches(rawPassword, storedPassword);
+        }
+        // Fallback: so sánh plain text (cho dữ liệu cũ chưa hash)
+        return rawPassword.equals(storedPassword);
+    }
+
+    public static boolean isHashed(String password) {
+        return password != null && (password.startsWith("$2a$") || password.startsWith("$2b$") || password.startsWith("$2y$"));
     }
 }

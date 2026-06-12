@@ -41,6 +41,15 @@ public class ArtistDAO {
                 .getResultList();
     }
 
+    public Artist findByNameExact(String name) {
+        List<Artist> list = em.createQuery(
+                        "SELECT a FROM Artist a WHERE LOWER(a.name) = LOWER(:name)", Artist.class)
+                .setParameter("name", name.trim())
+                .setMaxResults(1)
+                .getResultList();
+        return list.isEmpty() ? null : list.get(0);
+    }
+
     public List<Artist> findByCountry(String country) {
         return em.createQuery(
                         "SELECT a FROM Artist a WHERE a.country = :country ORDER BY a.name",

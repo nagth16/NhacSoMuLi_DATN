@@ -1,5 +1,6 @@
 package com.nhacso.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -27,8 +28,10 @@ public class Artist {
     private String country;
 
     @OneToMany(mappedBy = "artist")
+    @JsonIgnoreProperties({"artist", "songs"})
     private List<Album> albums;
 
     @ManyToMany(mappedBy = "artists")
+    @JsonIgnoreProperties({"artists", "album"})
     private List<Song> songs;
 }

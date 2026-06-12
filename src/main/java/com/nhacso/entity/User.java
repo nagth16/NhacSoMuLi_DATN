@@ -41,4 +41,7 @@ public class User {
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    @Column(name = "premium")
+    private Boolean premium;
 }

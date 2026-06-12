@@ -19,7 +19,7 @@ public class AdminFilter implements Filter {
         HttpSession session = httpRequest.getSession(false);
 
         // 1. Check xem đã đăng nhập chưa
-        if (session == null || session.getAttribute("username") != null == false) {
+        if (session == null || session.getAttribute("username") == null) {
             httpResponse.sendRedirect(httpRequest.getContextPath() + "/login");
             return;
         }

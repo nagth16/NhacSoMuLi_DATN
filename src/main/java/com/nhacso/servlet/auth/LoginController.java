@@ -25,12 +25,16 @@ public class LoginController {
     public String showLoginForm(
             @RequestParam(value = "username", required = false) String username,
             @RequestParam(value = "registered", required = false) String registered,
+            @RequestParam(value = "reset", required = false) String reset,
             Model model) {
         model.addAttribute("savedEmail", username);
         if ("true".equals(registered)) {
             model.addAttribute("successMsg", "Đăng ký thành công! Vui lòng đăng nhập.");
         }
-        return "login"; // Trả về /WEB-INF/views/login.jsp
+        if ("true".equals(reset)) {
+            model.addAttribute("successMsg", "Đặt lại mật khẩu thành công! Vui lòng đăng nhập.");
+        }
+        return "auth/login";
     }
 
     /**
@@ -49,7 +53,7 @@ public class LoginController {
         if (isBlank(email) || isBlank(password)) {
             model.addAttribute("errorMsg", "Email và password là bắt buộc.");
             model.addAttribute("savedEmail", email);
-            return "login";
+            return "auth/login";
         }
 
         // 2. Kiểm tra tài khoản và mật khẩu
@@ -57,20 +61,22 @@ public class LoginController {
         if (user == null || !PasswordUtils.matches(password, user.getPassword())) {
             model.addAttribute("errorMsg", "Thông tin đăng nhập không đúng.");
             model.addAttribute("savedEmail", email);
-            return "login";
+            return "auth/login";
         }
 
         // 3. Kiểm tra trạng thái tài khoản
         if (user.getStatus() != null && user.getStatus() == 0) {
             model.addAttribute("errorMsg", "Tài khoản đã bị khóa.");
             model.addAttribute("savedEmail", email);
-            return "login";
+            return "auth/login";
         }
 
         // 4. Đăng nhập thành công -> Lưu thông tin vào Session
         session.setAttribute("username", user.getUsername());
         session.setAttribute("userId", user.getUserId());
         session.setAttribute("role", user.getRole());
+        session.setAttribute("premium", user.getPremium() != null && user.getPremium());
+        session.setAttribute("user", user);
 
         // 5. Kiểm tra xem có yêu cầu chuyển hướng trước đó không
         String redirectUrl = (String) session.getAttribute("redirectAfterLogin");
